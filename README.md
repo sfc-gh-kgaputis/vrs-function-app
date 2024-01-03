@@ -21,6 +21,6 @@ az functionapp cors add --resource-group kgaputis-vrs-rg --name kgaputis-vrs-fun
 
 # Build and deploy zip package
 ```
-zip -r app.zip . -x '*.git*'
+zip -FSr app.zip . -x '*.git*'
 az functionapp deployment source config-zip -g kgaputis-vrs-rg -n kgaputis-vrs-function-app --src app.zip
 ```
