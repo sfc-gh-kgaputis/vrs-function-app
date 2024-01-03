@@ -6,6 +6,7 @@ conda activate vrs-functions
 pip install -r requirements.txt
 ```
 
+
 ## Create Azure Functions app in a new RG
 ```
 az login
@@ -19,8 +20,25 @@ az functionapp create --resource-group kgaputis-vrs-rg --consumption-plan-locati
 az functionapp cors add --resource-group kgaputis-vrs-rg --name kgaputis-vrs-function-app --allowed-origins 'https://portal.azure.com'
 ```
 
-# Build and deploy zip package
+# Deploy function app with remote build 
+```
+func azure functionapp publish kgaputis-vrs-function-app --build remote
+```
+
+# Build and deploy zip package (old approach)
 ```
 zip -FSr app.zip . -x '*.git*'
 az functionapp deployment source config-zip -g kgaputis-vrs-rg -n kgaputis-vrs-function-app --src app.zip
 ```
+
+
+## Local testing using Azure Funcions Core Tools (not working)
+```
+brew tap azure/functions
+brew install azure-functions-core-tools@4
+```
+```
+func start
+```
+https://github.com/Azure/azure-functions-core-tools/issues/2834
+

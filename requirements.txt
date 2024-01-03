@@ -1,1 +1,2 @@
 azure-functions
+ga4gh.vrs[extras]==0.8.5
