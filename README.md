@@ -30,7 +30,7 @@ func azure functionapp publish kgaputis-vrs-function-app --build remote
 zip -FSr app.zip . -x '*.git*'
 az functionapp deployment source config-zip -g kgaputis-vrs-rg -n kgaputis-vrs-function-app --src app.zip
 ```
-
+Maybe set `SCM_DO_BUILD_DURING_DEPLOYMENT=true` to install custom packages?
 
 ## Local testing using Azure Funcions Core Tools (not working)
 ```
