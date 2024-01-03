@@ -1,2 +1,3 @@
 app.zip
 local.settings.json
+*.log

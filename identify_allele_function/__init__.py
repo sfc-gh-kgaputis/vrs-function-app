@@ -4,7 +4,7 @@ import os
 
 import azure.functions as func
 from ga4gh.core import ga4gh_identify
-from ga4gh.vrs.extras.translator import Translator
+from ga4gh.vrs.extras.translator import AlleleTranslator
 from ga4gh.vrs.dataproxy import create_dataproxy
 
 
@@ -22,7 +22,7 @@ async def main(req: func.HttpRequest) -> func.HttpResponse:
             raise RuntimeError("Please populate the VRS_REPO_URL environment variable")
         logging.info(f'Using VRS repo: {repo_url}')
         dp = create_dataproxy(repo_url)
-        tlr = Translator(data_proxy=dp)
+        tlr = AlleleTranslator(data_proxy=dp)
 
         # This is basically an array of arrays. The inner array contains the
         # row number, and a value for each parameter passed to the function.
@@ -33,11 +33,16 @@ async def main(req: func.HttpRequest) -> func.HttpResponse:
 
         # For each input row in the JSON object...
         for input_row in input_rows:
-            hgvs_expr = input_row[1]
+            input_expr = input_row[1]
+            input_format = input_row[2]
+            logging.debug(
+                f'Processing row {input_row[0]} - identify allele for expression: {input_expr}, in format: {input_format}')
 
             # Translate and identify allele
-            allele = tlr.translate_from(hgvs_expr, 'hgvs')
+            allele = tlr.translate_from(input_expr, input_format)
             allele_id = ga4gh_identify(allele)
+            logging.debug(
+                f'Processing row {input_row[0]} - obtained allele_id: {allele_id}')
 
             output_rows.append([input_row[0], allele_id])
 
