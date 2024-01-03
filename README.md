@@ -14,7 +14,13 @@ az storage account create --name kgaputisvrssa --location eastus --resource-grou
 az functionapp create --resource-group kgaputis-vrs-rg --consumption-plan-location eastus --runtime python --runtime-version 3.10 --functions-version 4 --name kgaputis-vrs-function-app --storage-account kgaputisvrssa --os-type Linux
 ```
 
-## Configure git-based deployment
+## Configure CORS for testing in Azure Portal
 ```
-az functionapp deployment source config-local-git --name kgaputis-vrs-function-app --resource-group kgaputis-vrs-rg
+az functionapp cors add --resource-group kgaputis-vrs-rg --name kgaputis-vrs-function-app --allowed-origins 'https://portal.azure.com'
+```
+
+# Build and deploy zip package
+```
+zip -r app.zip . -x '*.git*'
+az functionapp deployment source config-zip -g kgaputis-vrs-rg -n kgaputis-vrs-function-app --src app.zip
 ```
